@@ -32,7 +32,7 @@ export default function Contact() {
           className="mt-16"
         >
           <a 
-            href="mailto:work.inderash@gmail.com" 
+            href="mailto:inderash18@gmail.com" 
             className="px-8 py-3 rounded-full bg-white border border-border text-black font-bold flex items-center gap-3 hover:border-accent hover:text-accent transition-colors shadow-sm"
           >
             <div className="w-2 h-2 rounded-full bg-black" />
@@ -51,12 +51,12 @@ export default function Contact() {
             Inderash<span className="text-accent text-5xl leading-none -ml-1 relative -top-1">.</span>
           </div>
           
-          <a href="mailto:work.inderash@gmail.com" className="flex items-center gap-2 text-text font-bold hover:text-accent transition-colors">
+          <a href="mailto:inderash18@gmail.com" className="flex items-center gap-2 text-text font-bold hover:text-accent transition-colors">
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-secondary">
               <rect width="20" height="16" x="2" y="4" rx="2" />
               <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
             </svg>
-            work.inderash@gmail.com
+            inderash18@gmail.com
           </a>
         </motion.div>
 
@@ -87,10 +87,9 @@ export default function Contact() {
             </p>
             
             <div className="flex gap-6 text-sm font-semibold text-text">
-              <a href="#" className="hover:text-accent transition-colors">GitHub</a>
-              <a href="#" className="hover:text-accent transition-colors">LinkedIn</a>
-              <a href="#" className="hover:text-accent transition-colors">X</a>
-              <a href="#" className="hover:text-accent transition-colors">Reddit</a>
+              <a href="https://github.com/inderash18" target="_blank" rel="noopener noreferrer" className="hover:text-accent transition-colors">GitHub</a>
+              <a href="https://www.reddit.com/user/Conscious-Cake157/" target="_blank" rel="noopener noreferrer" className="hover:text-accent transition-colors">Reddit</a>
+              <a href="mailto:inderash18@gmail.com" className="hover:text-accent transition-colors">Email</a>
             </div>
           </div>
         </div>

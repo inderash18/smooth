@@ -29,9 +29,9 @@ export default function Footer() {
             
             <div className="flex flex-col gap-4">
               <span className="label-mono text-[#666666]">Socials</span>
-              <a href="#" className="hover:text-[#FF6A3D] transition-colors">GitHub</a>
-              <a href="#" className="hover:text-[#FF6A3D] transition-colors">LinkedIn</a>
-              <a href="#" className="hover:text-[#FF6A3D] transition-colors">Twitter</a>
+              <a href="https://github.com/inderash18" target="_blank" rel="noopener noreferrer" className="hover:text-[#FF6A3D] transition-colors">GitHub</a>
+              <a href="https://www.reddit.com/user/Conscious-Cake157/" target="_blank" rel="noopener noreferrer" className="hover:text-[#FF6A3D] transition-colors">Reddit</a>
+              <a href="mailto:inderash18@gmail.com" className="hover:text-[#FF6A3D] transition-colors">Email</a>
             </div>
           </div>
 

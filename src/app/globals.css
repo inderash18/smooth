@@ -174,3 +174,12 @@ html.lenis, html.lenis body { height: auto; }
 .clip-text {
   clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
 }
+
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.animate-spin-slow {
+  animation: spin-slow 20s linear infinite;
+}

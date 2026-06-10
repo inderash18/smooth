@@ -104,22 +104,33 @@ export default function Hero() {
             </div>
 
             {/* Profile / Abstract Shape Placeholder */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.8, rotate: -10 }}
-              animate={{ opacity: 1, scale: 1, rotate: 0 }}
-              transition={{ duration: 1.5, ease: EASE, delay: 0.7 }}
-              className="relative w-20 h-20 md:w-28 md:h-28 rounded-full overflow-hidden glass-card flex-shrink-0 group"
-            >
-              <div className="absolute inset-0 bg-gradient-to-br from-accent/20 to-transparent group-hover:scale-110 transition-transform duration-700 pointer-events-none" />
-              <div className="absolute inset-0 flex items-center justify-center">
-                <SpotlightImage 
-                  primarySrc="/1.jpeg"
-                  secondarySrc="/face.jpg"
-                  spotlightSize={50}
-                  className="w-full h-full"
-                />
+            <div className="relative w-24 h-24 md:w-32 md:h-32 flex-shrink-0 group flex items-center justify-center">
+              {/* Rotating SVG Frame */}
+              <div className="absolute inset-0 z-0">
+                <svg viewBox="0 0 100 100" className="w-full h-full animate-spin-slow">
+                  <path d="M50 10 C 20 10, 10 30, 10 50 C 10 70, 30 90, 50 90 C 80 90, 90 70, 90 50 C 90 20, 70 10, 50 10 Z" fill="none" stroke="currentColor" strokeWidth="1" className="text-accent"></path>
+                  <path d="M50 20 C 30 20, 20 40, 20 50 C 20 70, 40 80, 50 80 C 70 80, 80 60, 80 50 C 80 30, 70 20, 50 20 Z" fill="none" stroke="currentColor" strokeWidth="0.5" className="text-text"></path>
+                </svg>
               </div>
-            </motion.div>
+
+              {/* Profile Image nested inside */}
+              <motion.div
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 1.5, ease: EASE, delay: 0.7 }}
+                className="absolute inset-[20%] rounded-full overflow-hidden glass-card z-10"
+              >
+                <div className="absolute inset-0 bg-gradient-to-br from-accent/20 to-transparent group-hover:scale-110 transition-transform duration-700 pointer-events-none" />
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <SpotlightImage 
+                    primarySrc="/1.jpeg"
+                    secondarySrc="/face.jpg"
+                    spotlightSize={50}
+                    className="w-full h-full"
+                  />
+                </div>
+              </motion.div>
+            </div>
           </div>
         </div>
 

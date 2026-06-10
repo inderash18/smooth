@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { useEffect, useRef } from "react";
 import { EASE } from "@/lib/motion";
+import SpotlightImage from "@/components/SpotlightImage";
 
 function FloatingNode({ delay, x, y, size }: { delay: number, x: string, y: string, size: number }) {
   return (
@@ -107,14 +108,16 @@ export default function Hero() {
               initial={{ opacity: 0, scale: 0.8, rotate: -10 }}
               animate={{ opacity: 1, scale: 1, rotate: 0 }}
               transition={{ duration: 1.5, ease: EASE, delay: 0.7 }}
-              className="relative w-48 h-48 md:w-64 md:h-64 rounded-[40px] overflow-hidden glass-card flex-shrink-0 group"
+              className="relative w-20 h-20 md:w-28 md:h-28 rounded-full overflow-hidden glass-card flex-shrink-0 group"
             >
-              <div className="absolute inset-0 bg-gradient-to-br from-accent/20 to-transparent group-hover:scale-110 transition-transform duration-700" />
-              <div className="absolute inset-0 flex items-center justify-center mix-blend-overlay opacity-50">
-                <svg viewBox="0 0 100 100" className="w-full h-full animate-spin-slow">
-                  <path d="M50 10 C 20 10, 10 30, 10 50 C 10 70, 30 90, 50 90 C 80 90, 90 70, 90 50 C 90 20, 70 10, 50 10 Z" fill="none" stroke="currentColor" strokeWidth="1" className="text-accent" />
-                  <path d="M50 20 C 30 20, 20 40, 20 50 C 20 70, 40 80, 50 80 C 70 80, 80 60, 80 50 C 80 30, 70 20, 50 20 Z" fill="none" stroke="currentColor" strokeWidth="0.5" className="text-text" />
-                </svg>
+              <div className="absolute inset-0 bg-gradient-to-br from-accent/20 to-transparent group-hover:scale-110 transition-transform duration-700 pointer-events-none" />
+              <div className="absolute inset-0 flex items-center justify-center">
+                <SpotlightImage 
+                  primarySrc="/1.jpeg"
+                  secondarySrc="/face.jpg"
+                  spotlightSize={50}
+                  className="w-full h-full"
+                />
               </div>
             </motion.div>
           </div>

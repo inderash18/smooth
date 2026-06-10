@@ -13,6 +13,42 @@ const NAV_LINKS = [
   { label: "Experience", href: "#experience",  num: "06" },
 ];
 
+const AnimatedLink = ({ label, href, num }: { label: string; href: string; num: string }) => {
+  return (
+    <li>
+      <a href={href} className="group relative inline-flex items-start">
+        <span className="relative block overflow-hidden cursor-pointer font-bold" style={{ lineHeight: 1.2 }}>
+          <span className="flex items-center text-text">
+            {label.split("").map((char, i) => (
+              <span
+                key={i}
+                className="inline-block whitespace-pre transition-transform duration-500 ease-[cubic-bezier(0.76,0,0.24,1)] group-hover:-translate-y-full"
+                style={{ transitionDelay: `${i * 0.02}s` }}
+              >
+                {char}
+              </span>
+            ))}
+          </span>
+          <span className="absolute inset-0 flex items-center text-accent">
+            {label.split("").map((char, i) => (
+              <span
+                key={i}
+                className="inline-block whitespace-pre translate-y-full transition-transform duration-500 ease-[cubic-bezier(0.76,0,0.24,1)] group-hover:translate-y-0"
+                style={{ transitionDelay: `${i * 0.02}s` }}
+              >
+                {char}
+              </span>
+            ))}
+          </span>
+        </span>
+        <sup className="text-[9px] font-bold opacity-60 ml-[1px] leading-none mt-[3px] text-secondary">
+          {num}
+        </sup>
+      </a>
+    </li>
+  );
+};
+
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -47,20 +83,11 @@ export default function Navbar() {
         </a>
 
         {/* Center: Links */}
-        <nav className="hidden lg:flex items-center gap-8 absolute left-1/2 -translate-x-1/2">
+        <ul className="hidden min-[1261px]:flex items-center gap-6 min-[1261px]:gap-8 rounded-full px-12 py-3 bg-[#fffcf3]/50 shadow-sm dark:border dark:border-white/50 dark:bg-transparent absolute left-1/2 -translate-x-1/2 backdrop-blur-sm">
           {NAV_LINKS.map((link) => (
-            <a
-              key={link.label}
-              href={link.href}
-              className="text-[15px] font-bold text-text hover:text-accent transition-colors relative group"
-            >
-              {link.label}
-              <sup className="text-[9px] font-semibold text-secondary ml-0.5 absolute -top-1 -right-3">
-                {link.num}
-              </sup>
-            </a>
+            <AnimatedLink key={link.label} {...link} />
           ))}
-        </nav>
+        </ul>
 
         {/* Right: Theme Toggle & Connect */}
         <div className="hidden lg:flex items-center gap-6">
@@ -71,7 +98,7 @@ export default function Navbar() {
           >
             {theme === "light" ? (
               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />
+                <path fill="currentColor" stroke="none" d="M21.64,13a1,1,0,0,0-1.05-.14,8.05,8.05,0,0,1-3.37.73A8.15,8.15,0,0,1,9.08,5.49a8.59,8.59,0,0,1,.25-2A1,1,0,0,0,8,2.36,10.14,10.14,0,1,0,22,14.05,1,1,0,0,0,21.64,13Zm-9.5,6.69A8.14,8.14,0,0,1,7.08,5.22v.27A10.15,10.15,0,0,0,17.22,15.63a9.79,9.79,0,0,0,2.1-.22A8.11,8.11,0,0,1,12.14,19.73Z" />
               </svg>
             ) : (
               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -104,7 +131,7 @@ export default function Navbar() {
         <div className="lg:hidden flex items-center gap-4">
           <button onClick={toggleTheme} className="text-text">
             {theme === "light" ? (
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" /></svg>
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path fill="currentColor" stroke="none" d="M21.64,13a1,1,0,0,0-1.05-.14,8.05,8.05,0,0,1-3.37.73A8.15,8.15,0,0,1,9.08,5.49a8.59,8.59,0,0,1,.25-2A1,1,0,0,0,8,2.36,10.14,10.14,0,1,0,22,14.05,1,1,0,0,0,21.64,13Zm-9.5,6.69A8.14,8.14,0,0,1,7.08,5.22v.27A10.15,10.15,0,0,0,17.22,15.63a9.79,9.79,0,0,0,2.1-.22A8.11,8.11,0,0,1,12.14,19.73Z" /></svg>
             ) : (
               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
             )}

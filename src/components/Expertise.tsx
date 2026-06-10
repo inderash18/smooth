@@ -108,6 +108,41 @@ export default function Expertise() {
           ))}
         </div>
 
+        {/* Tools Section */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.8, ease: EASE, delay: 0.6 }}
+          className="mt-24 text-center"
+        >
+          <h3 className="text-xl md:text-2xl font-bold text-text mb-10">Expertise in Tools</h3>
+          <div className="flex flex-wrap justify-center items-center gap-4 md:gap-6">
+            {[
+              { name: "Firebase", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/firebase/firebase-original.svg" },
+              { name: "MongoDB", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/mongodb/mongodb-original.svg" },
+              { name: "Figma", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/figma/figma-original.svg" },
+              { name: "Git", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/git/git-original.svg" },
+              { name: "Illustrator", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/illustrator/illustrator-plain.svg" },
+              { name: "Photoshop", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/photoshop/photoshop-plain.svg" },
+              { name: "Canva", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/canva/canva-original.svg" }
+            ].map((tool) => (
+              <div 
+                key={tool.name} 
+                className="w-16 h-16 md:w-20 md:h-20 rounded-full border border-border/50 bg-bg shadow-sm flex items-center justify-center p-3.5 md:p-4 hover:scale-110 hover:shadow-md transition-all duration-300 cursor-pointer"
+                title={tool.name}
+              >
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={tool.icon} alt={tool.name} className="w-full h-full object-contain drop-shadow-sm" />
+              </div>
+            ))}
+            
+            {/* "more" circle */}
+            <div className="w-16 h-16 md:w-20 md:h-20 rounded-full border border-border/50 bg-bg shadow-sm flex items-center justify-center hover:scale-110 hover:shadow-md transition-all duration-300 cursor-pointer">
+              <span className="text-sm md:text-base font-bold text-text">more</span>
+            </div>
+          </div>
+        </motion.div>
+
       </div>
     </section>
   );

@@ -35,7 +35,7 @@ export default function About() {
             </motion.h2>
             
             <div className="mt-6 flex flex-col gap-2 overflow-hidden">
-              {["Artificial Intelligence,", "Software Engineering,", "and Modern Web Technologies", "meet."].map((line, i) => (
+              {["Artificial Intelligence,", "Software Engineering,",].map((line, i) => (
                 <motion.div
                   key={i}
                   initial={{ opacity: 0, y: 40, rotate: 2 }}

@@ -3,6 +3,7 @@
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 import { EASE } from "@/lib/motion";
+import Image from "next/image";
 
 interface ProjectCardProps {
   title: string;
@@ -90,10 +91,10 @@ function ProjectCard({ title, subtitle, description, year, color, textColor, pil
         {image ? (
           link ? (
             <a href={link} target="_blank" rel="noopener noreferrer" className="absolute inset-0 w-full h-full block z-10">
-              <img src={image} alt={title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+              <Image src={image} alt={title} fill sizes="(max-width: 768px) 100vw, 33vw" className="object-cover transition-transform duration-700 group-hover:scale-105" />
             </a>
           ) : (
-            <img src={image} alt={title} className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+            <Image src={image} alt={title} fill sizes="(max-width: 768px) 100vw, 33vw" className="object-cover transition-transform duration-700 group-hover:scale-105" />
           )
         ) : (
           <>

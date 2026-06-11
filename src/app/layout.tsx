@@ -1,15 +1,9 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 import "./globals.css";
 import SmoothScroll from "@/components/SmoothScroll";
 import { ThemeProvider } from "@/providers/ThemeProvider";
 import ParticleField from "@/components/ParticleField";
-
-const inter = Inter({
-  variable: "--font-inter",
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700", "800", "900"],
-});
+import AICatAssistant from "@/components/AICatAssistant";
 
 export const metadata: Metadata = {
   title: "Inderash — AI Engineer & Full Stack Developer",
@@ -23,7 +17,30 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${inter.variable} antialiased selection:bg-accent selection:text-white`}>
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        {/* eslint-disable-next-line @next/next/no-page-custom-font */}
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                try {
+                  var savedTheme = localStorage.getItem('theme');
+                  var theme = savedTheme;
+                  if (!theme) {
+                    var isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                    theme = isDark ? 'dark' : 'light';
+                  }
+                  document.documentElement.setAttribute('data-theme', theme);
+                } catch (e) {}
+              })();
+            `,
+          }}
+        />
+      </head>
+      <body className="antialiased selection:bg-accent selection:text-white">
         <ThemeProvider>
           {/* Background Elements */}
           <ParticleField />
@@ -32,6 +49,7 @@ export default function RootLayout({
           
           <SmoothScroll />
           {children}
+          <AICatAssistant />
         </ThemeProvider>
       </body>
     </html>

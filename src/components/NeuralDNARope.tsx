@@ -28,8 +28,8 @@ export default function NeuralDNARope() {
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    let width = 100;
-    let height = 300;
+    const width = 100;
+    const height = 300;
     canvas.width = width;
     canvas.height = height;
 
@@ -57,7 +57,6 @@ export default function NeuralDNARope() {
     // Physics parameters
     const gravity = 0.5;
     const friction = 0.92;
-    const bounce = 0.9;
 
     let toggleTriggered = false;
     let energyWaveProgress = 0;
@@ -148,7 +147,6 @@ export default function NeuralDNARope() {
       ctx.beginPath();
       ctx.moveTo(points[0].x, points[0].y);
       for (let i = 1; i < points.length; i++) {
-        const p0 = points[i - 1];
         const p1 = points[i];
         
         // Draw main rope segment
@@ -232,18 +230,20 @@ export default function NeuralDNARope() {
     };
     loop();
 
+    let dragRect: DOMRect | null = null;
+
     // Event Handlers
     const handleDown = (e: MouseEvent | TouchEvent) => {
-      const rect = canvas.getBoundingClientRect();
+      dragRect = canvas.getBoundingClientRect();
       const clientX = "touches" in e ? e.touches[0].clientX : e.clientX;
       const clientY = "touches" in e ? e.touches[0].clientY : e.clientY;
       
-      mouseX = clientX - rect.left;
-      mouseY = clientY - rect.top;
+      mouseX = clientX - dragRect.left;
+      mouseY = clientY - dragRect.top;
 
       // Find closest point
-      let closest = points[points.length - 1]; // usually pull from bottom
-      let minDist = 30; // hit radius
+      const closest = points[points.length - 1]; // usually pull from bottom
+      const minDist = 30; // hit radius
       
       const dx = closest.x - mouseX;
       const dy = closest.y - mouseY;
@@ -257,17 +257,20 @@ export default function NeuralDNARope() {
     const handleMove = (e: MouseEvent | TouchEvent) => {
       if (!isDragging) return;
       e.preventDefault();
-      const rect = canvas.getBoundingClientRect();
+      if (!dragRect) {
+        dragRect = canvas.getBoundingClientRect();
+      }
       const clientX = "touches" in e ? e.touches[0].clientX : e.clientX;
       const clientY = "touches" in e ? e.touches[0].clientY : e.clientY;
-      mouseX = clientX - rect.left;
-      mouseY = clientY - rect.top;
+      mouseX = clientX - dragRect.left;
+      mouseY = clientY - dragRect.top;
     };
 
     const handleUp = () => {
       isDragging = false;
       draggedPoint = null;
       setIsPulling(false);
+      dragRect = null;
     };
 
     canvas.addEventListener("mousedown", handleDown);

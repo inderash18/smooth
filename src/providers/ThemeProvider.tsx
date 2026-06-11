@@ -13,20 +13,27 @@ const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [theme, setTheme] = useState<Theme>("light");
-  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    const savedTheme = localStorage.getItem("theme") as Theme | null;
-    if (savedTheme) {
-      setTheme(savedTheme);
-      document.documentElement.setAttribute("data-theme", savedTheme);
+    const currentTheme = document.documentElement.getAttribute("data-theme") as Theme | null;
+    let initialTheme: Theme = "light";
+    if (currentTheme) {
+      initialTheme = currentTheme;
     } else {
-      const isDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-      const initialTheme = isDark ? "dark" : "light";
-      setTheme(initialTheme);
-      document.documentElement.setAttribute("data-theme", initialTheme);
+      const savedTheme = localStorage.getItem("theme") as Theme | null;
+      if (savedTheme) {
+        initialTheme = savedTheme;
+      } else {
+        const isDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+        initialTheme = isDark ? "dark" : "light";
+      }
     }
-    setMounted(true);
+
+    const timeoutId = setTimeout(() => {
+      setTheme(initialTheme);
+    }, 0);
+
+    return () => clearTimeout(timeoutId);
   }, []);
 
   const toggleTheme = () => {
@@ -38,9 +45,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
 
   return (
     <ThemeContext.Provider value={{ theme, toggleTheme }}>
-      <div style={{ visibility: mounted ? "visible" : "hidden" }}>
-        {children}
-      </div>
+      {children}
     </ThemeContext.Provider>
   );
 }

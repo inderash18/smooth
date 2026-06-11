@@ -20,6 +20,7 @@ export default function SpotlightImage({
   spotlightSize = 100,
 }: SpotlightImageProps) {
   const containerRef = useRef<HTMLDivElement>(null);
+  const rectRef = useRef<DOMRect | null>(null);
   const [isHovered, setIsHovered] = useState(false);
 
   // Track mouse coordinates
@@ -39,27 +40,44 @@ export default function SpotlightImage({
 
   const clipPath = useMotionTemplate`circle(${radius}px at ${springX}px ${springY}px)`;
 
+  const handleMouseEnter = () => {
+    setIsHovered(true);
+    if (containerRef.current) {
+      rectRef.current = containerRef.current.getBoundingClientRect();
+    }
+  };
+
   const handleMouseMove = (e: React.MouseEvent) => {
     if (!containerRef.current) return;
-    const rect = containerRef.current.getBoundingClientRect();
+    let rect = rectRef.current;
+    if (!rect) {
+      rect = containerRef.current.getBoundingClientRect();
+      rectRef.current = rect;
+    }
     mouseX.set(e.clientX - rect.left);
     mouseY.set(e.clientY - rect.top);
+  };
+
+  const handleMouseLeave = () => {
+    setIsHovered(false);
+    rectRef.current = null;
   };
 
   return (
     <div
       ref={containerRef}
       onMouseMove={handleMouseMove}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
       className={`relative cursor-none w-full h-full select-none group ${className}`}
     >
       {/* Primary Image */}
-      <div className="w-full h-full will-change-[mask-image]">
+      <div className="relative w-full h-full will-change-[mask-image]">
         <Image
           src={primarySrc}
           alt={alt}
           fill
+          sizes="(max-width: 768px) 96px, 128px"
           draggable={false}
           className="object-contain pointer-events-none"
         />
@@ -74,6 +92,7 @@ export default function SpotlightImage({
           src={secondarySrc}
           alt={`${alt} Reveal`}
           fill
+          sizes="(max-width: 768px) 96px, 128px"
           draggable={false}
           className="object-contain scale-[1.02] origin-center pointer-events-none"
         />

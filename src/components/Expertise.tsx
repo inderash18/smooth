@@ -12,11 +12,22 @@ interface CardProps {
 
 function ExpertiseCard({ title, items, delay }: CardProps) {
   const cardRef = useRef<HTMLDivElement>(null);
+  const rectRef = useRef<DOMRect | null>(null);
   const inView = useInView(cardRef, { once: true, margin: "-50px" });
+
+  const handleMouseEnter = () => {
+    if (cardRef.current) {
+      rectRef.current = cardRef.current.getBoundingClientRect();
+    }
+  };
 
   const handleMouseMove = (e: MouseEvent<HTMLDivElement>) => {
     if (!cardRef.current) return;
-    const rect = cardRef.current.getBoundingClientRect();
+    let rect = rectRef.current;
+    if (!rect) {
+      rect = cardRef.current.getBoundingClientRect();
+      rectRef.current = rect;
+    }
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
     
@@ -30,6 +41,7 @@ function ExpertiseCard({ title, items, delay }: CardProps) {
   };
 
   const handleMouseLeave = () => {
+    rectRef.current = null;
     if (!cardRef.current) return;
     cardRef.current.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
   };
@@ -40,9 +52,10 @@ function ExpertiseCard({ title, items, delay }: CardProps) {
       initial={{ opacity: 0, y: 50 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 0.8, ease: EASE, delay }}
+      onMouseEnter={handleMouseEnter}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      className="glass-card p-10 h-full flex flex-col group relative overflow-hidden"
+      className="glass-card p-10 h-full flex flex-col group relative overflow-hidden will-change-transform"
       style={{ transition: "transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease, border-color 0.4s ease" }}
     >
       {/* Background Glow */}

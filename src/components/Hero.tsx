@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { useEffect, useRef } from "react";
 import { EASE } from "@/lib/motion";
 import SpotlightImage from "@/components/SpotlightImage";
+import TextMorph from "@/components/TextMorph";
 
 function FloatingNode({ delay, x, y, size }: { delay: number, x: string, y: string, size: number }) {
   return (
@@ -34,20 +35,36 @@ export default function Hero() {
     const container = containerRef.current;
     if (!container) return;
 
+    // Cache elements on mount
+    const elements = Array.from(container.querySelectorAll('.parallax-layer')) as HTMLElement[];
+    let rafId: number | null = null;
+
     const handleMouseMove = (e: MouseEvent) => {
-      const { clientX, clientY } = e;
-      const x = (clientX / window.innerWidth - 0.5) * 20;
-      const y = (clientY / window.innerHeight - 0.5) * 20;
-      
-      const elements = container.querySelectorAll('.parallax-layer');
-      elements.forEach((el, index) => {
-        const factor = (index + 1) * 0.5;
-        (el as HTMLElement).style.transform = `translate(${x * factor}px, ${y * factor}px)`;
+      if (rafId) cancelAnimationFrame(rafId);
+
+      rafId = requestAnimationFrame(() => {
+        const { clientX, clientY } = e;
+        const x = (clientX / window.innerWidth - 0.5) * 20;
+        const y = (clientY / window.innerHeight - 0.5) * 20;
+        
+        elements.forEach((el, index) => {
+          const factor = (index + 1) * 0.5;
+          el.style.transform = `translate3d(${x * factor}px, ${y * factor}px, 0)`;
+        });
       });
     };
 
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
+    const hasHover = window.matchMedia("(hover: hover)").matches;
+    if (hasHover) {
+      window.addEventListener('mousemove', handleMouseMove);
+    }
+    
+    return () => {
+      if (rafId) cancelAnimationFrame(rafId);
+      if (hasHover) {
+        window.removeEventListener('mousemove', handleMouseMove);
+      }
+    };
   }, []);
 
   return (
@@ -74,14 +91,14 @@ export default function Hero() {
 
         {/* Massive Typography Grid */}
         <div className="relative">
-          <motion.div 
+          <motion.h1 
             initial={{ opacity: 0, y: 50, clipPath: 'polygon(0 0, 100% 0, 100% 0, 0 0)' }}
             animate={{ opacity: 1, y: 0, clipPath: 'polygon(0 0, 100% 0, 100% 100%, 0 100%)' }}
             transition={{ duration: 1.2, ease: EASE, delay: 0.3 }}
             className="hero-display text-text parallax-layer"
           >
             INDERASH
-          </motion.div>
+          </motion.h1>
 
           <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-8 mt-2 parallax-layer">
             <div className="flex flex-col">
@@ -97,9 +114,10 @@ export default function Hero() {
                 initial={{ opacity: 0, x: -30 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 1, ease: EASE, delay: 0.6 }}
-                className="text-2xl md:text-4xl font-black tracking-tight text-text"
+                className="text-2xl md:text-4xl font-black tracking-tight text-text flex items-center flex-wrap"
               >
-                FULL STACK DEVELOPER
+                <span className="mr-2">FULL STACK</span>
+                <TextMorph words={["DEVELOPER", "DESIGNER"]} className="text-accent" />
               </motion.div>
             </div>
 

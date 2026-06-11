@@ -1,12 +1,33 @@
 "use client";
 
-import { motion, useInView } from "framer-motion";
-import { useRef } from "react";
+import { useState, useRef } from "react";
+import { motion, AnimatePresence, useInView } from "framer-motion";
 import { EASE } from "@/lib/motion";
+import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 
 export default function Contact() {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: "-100px" });
+
+  const [step, setStep] = useState<"button" | "form" | "success">("button");
+  const [formData, setFormData] = useState({ name: "", email: "", message: "" });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!formData.name.trim() || !formData.email.trim() || !formData.message.trim()) return;
+
+    setIsSubmitting(true);
+    // Simulate network submission delay
+    await new Promise((resolve) => setTimeout(resolve, 1500));
+    setIsSubmitting(false);
+    setStep("success");
+  };
+
+  const handleReset = () => {
+    setFormData({ name: "", email: "", message: "" });
+    setStep("button");
+  };
 
   return (
     <section id="contact" className="pt-32 pb-10 relative bg-bg" ref={ref}>
@@ -24,28 +45,157 @@ export default function Contact() {
           </h2>
         </motion.div>
 
-        {/* CTA Button */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={inView ? { opacity: 1, scale: 1 } : {}}
-          transition={{ duration: 0.5, ease: EASE, delay: 0.3 }}
-          className="mt-16"
-        >
-          <a 
-            href="mailto:inderash18@gmail.com" 
-            className="px-8 py-3 rounded-full bg-white border border-border text-black font-bold flex items-center gap-3 hover:border-accent hover:text-accent transition-colors shadow-sm"
-          >
-            <div className="w-2 h-2 rounded-full bg-black" />
-            Get in Touch
-          </a>
-        </motion.div>
+        {/* Dynamic Interactive States */}
+        <div className="w-full flex justify-center mt-12 min-h-[300px]">
+          <AnimatePresence mode="wait">
+            
+            {/* Step 1: Initial CTA Button */}
+            {step === "button" && (
+              <motion.div
+                key="cta-button"
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.95 }}
+                transition={{ duration: 0.4, ease: EASE }}
+                className="flex flex-col items-center"
+              >
+                <button 
+                  onClick={() => setStep("form")}
+                  className="px-8 py-4 rounded-full bg-text hover:bg-accent text-bg hover:text-white font-bold flex items-center gap-3 transition-all shadow-md group cursor-pointer"
+                >
+                  <div className="w-2.5 h-2.5 rounded-full bg-accent group-hover:bg-white transition-colors" />
+                  Get in Touch
+                </button>
+              </motion.div>
+            )}
 
-        {/* Brand & Email */}
+            {/* Step 2: Details Input Form */}
+            {step === "form" && (
+              <motion.form
+                key="contact-form"
+                onSubmit={handleSubmit}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.4, ease: EASE }}
+                className="w-full max-w-[500px] bg-card border border-border/60 rounded-[32px] p-8 shadow-xl backdrop-blur-md flex flex-col gap-5"
+              >
+                <div>
+                  <label htmlFor="form-name" className="text-[10px] font-extrabold text-secondary uppercase tracking-widest mb-2 block">
+                    Your Name
+                  </label>
+                  <input
+                    id="form-name"
+                    type="text"
+                    required
+                    value={formData.name}
+                    onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
+                    placeholder="Enter your name"
+                    className="w-full bg-black/30 border border-border focus:border-accent text-text text-sm rounded-2xl px-5 py-3.5 focus:outline-none transition-colors"
+                  />
+                </div>
+
+                <div>
+                  <label htmlFor="form-email" className="text-[10px] font-extrabold text-secondary uppercase tracking-widest mb-2 block">
+                    Your Email
+                  </label>
+                  <input
+                    id="form-email"
+                    type="email"
+                    required
+                    value={formData.email}
+                    onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
+                    placeholder="Enter your email address"
+                    className="w-full bg-black/30 border border-border focus:border-accent text-text text-sm rounded-2xl px-5 py-3.5 focus:outline-none transition-colors"
+                  />
+                </div>
+
+                <div>
+                  <label htmlFor="form-message" className="text-[10px] font-extrabold text-secondary uppercase tracking-widest mb-2 block">
+                    Message Details
+                  </label>
+                  <textarea
+                    id="form-message"
+                    required
+                    rows={4}
+                    value={formData.message}
+                    onChange={(e) => setFormData(prev => ({ ...prev, message: e.target.value }))}
+                    placeholder="Tell me about your project or inquiry..."
+                    className="w-full bg-black/30 border border-border focus:border-accent text-text text-sm rounded-2xl px-5 py-3.5 focus:outline-none transition-colors h-32 resize-none"
+                  />
+                </div>
+
+                <div className="flex gap-4 mt-2">
+                  <button
+                    type="button"
+                    onClick={() => setStep("button")}
+                    className="px-6 py-3.5 rounded-full border border-border text-text font-bold hover:bg-border/25 transition-all cursor-pointer text-sm"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="flex-1 py-3.5 rounded-full bg-text hover:bg-accent text-bg hover:text-white font-bold transition-all flex items-center justify-center gap-2 cursor-pointer shadow-md disabled:opacity-60 text-sm"
+                  >
+                    {isSubmitting ? (
+                      <>
+                        <div className="w-4 h-4 border-2 border-bg border-t-transparent rounded-full animate-spin" />
+                        Sending...
+                      </>
+                    ) : (
+                      "Send Message"
+                    )}
+                  </button>
+                </div>
+              </motion.form>
+            )}
+
+            {/* Step 3: Success Animation View */}
+            {step === "success" && (
+              <motion.div
+                key="success-card"
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.9 }}
+                transition={{ duration: 0.4, ease: EASE }}
+                className="w-full max-w-[450px] bg-card border border-border/60 rounded-[32px] p-8 text-center flex flex-col items-center justify-center shadow-xl backdrop-blur-md"
+              >
+                {/* Lottie Cat Success Animation */}
+                <div className="w-32 h-32 pointer-events-none mb-4">
+                  <DotLottieReact
+                    src="https://lottie.host/59886aa3-c5f5-4fd2-806a-e69e8305f2bc/aPUYMe9DrL.lottie"
+                    loop
+                    autoplay
+                  />
+                </div>
+
+                <h3 className="text-2xl font-black text-text uppercase tracking-tight">
+                  Message Sent!
+                </h3>
+                
+                <p className="text-secondary text-sm font-medium mt-3 max-w-[320px] leading-relaxed">
+                  Thank you for reaching out, {formData.name}. Inderash will get back to you as soon as possible!
+                </p>
+
+                <button
+                  onClick={handleReset}
+                  className="mt-6 px-6 py-2.5 rounded-full border border-border hover:border-accent hover:text-accent font-bold text-xs uppercase tracking-wider transition-all cursor-pointer"
+                >
+                  Send another message
+                </button>
+              </motion.div>
+            )}
+
+          </AnimatePresence>
+        </div>
+
+        {/* Brand & Email info */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.8, ease: EASE, delay: 0.5 }}
-          className="mt-32 flex flex-col items-center gap-6"
+          className="mt-20 flex flex-col items-center gap-6"
         >
           <div className="font-black text-4xl tracking-tight flex items-center text-text">
             Inderash<span className="text-accent text-5xl leading-none -ml-1 relative -top-1">.</span>
@@ -60,24 +210,8 @@ export default function Contact() {
           </a>
         </motion.div>
 
-        {/* Bottom Line & Cat Illustration */}
+        {/* Bottom Line & Footer links */}
         <div className="w-full mt-24 relative">
-          
-          {/* SVG Cat Placeholder sitting on the line */}
-          <div className="absolute right-8 md:right-32 bottom-0 w-24 h-32 z-10 pointer-events-none">
-            <svg viewBox="0 0 100 120" xmlns="http://www.w3.org/2000/svg" className="w-full h-full drop-shadow-lg">
-              {/* Cat Body */}
-              <path d="M30 110 C 20 60, 40 30, 50 30 C 60 30, 80 60, 70 110 Z" fill="#2A2A35" />
-              {/* Cat Belly */}
-              <path d="M40 110 C 35 80, 45 50, 50 50 C 55 50, 65 80, 60 110 Z" fill="#E6E4EA" />
-              {/* Cat Ears */}
-              <path d="M40 35 L 45 15 L 55 25" fill="#2A2A35" />
-              <path d="M60 35 L 55 15 L 45 25" fill="#2A2A35" />
-              {/* Cat Tail */}
-              <path d="M70 100 C 90 100, 100 80, 90 60 C 80 40, 75 70, 70 80" fill="none" stroke="#2A2A35" strokeWidth="8" strokeLinecap="round" />
-            </svg>
-          </div>
-
           <div className="w-full h-px bg-border" />
           
           {/* Footer Content */}

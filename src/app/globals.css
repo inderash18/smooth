@@ -2,6 +2,7 @@
 
 /* ── Design Tokens ─────────────────────────────────────────────── */
 :root {
+  --font-inter: 'Inter', sans-serif;
   /* Light Mode (Default) */
   --bg: #F7F5F0;
   --text: #111111;
@@ -78,8 +79,15 @@ body {
   content: "";
   position: absolute;
   inset: -200%;
-  background-image: url('data:image/svg+xml,%3Csvg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="noiseFilter"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch"/%3E%3C/filter%3E%3Crect width="100%25" height="100%25" filter="url(%23noiseFilter)"/%3E%3C/svg%3E');
+
   animation: noise-anim 8s steps(10) infinite;
+  will-change: transform;
+  backface-visibility: hidden;
+}
+
+.parallax-layer {
+  will-change: transform;
+  backface-visibility: hidden;
 }
 
 @keyframes noise-anim {
@@ -182,4 +190,82 @@ html.lenis, html.lenis body { height: auto; }
 
 .animate-spin-slow {
   animation: spin-slow 20s linear infinite;
+}
+
+/* ── Interactive Cat Animations ────────────────────────────────── */
+.animate-tail-slow {
+  animation: tail-sway-slow 2.4s ease-in-out infinite;
+  transform-origin: 70px 100px;
+}
+
+.animate-tail-fast {
+  animation: tail-sway-fast 0.8s ease-in-out infinite;
+  transform-origin: 70px 100px;
+}
+
+.animate-breathing {
+  animation: cat-breathing 4s ease-in-out infinite;
+  transform-origin: 50px 110px;
+}
+
+.animate-breathing-sleep {
+  animation: cat-breathing-sleep 6s ease-in-out infinite;
+  transform-origin: 50px 110px;
+}
+
+.animate-z-float-1 {
+  animation: z-float 3s ease-in-out infinite;
+}
+
+.animate-z-float-2 {
+  animation: z-float 3s ease-in-out infinite;
+  animation-delay: 1s;
+}
+
+.animate-z-float-3 {
+  animation: z-float 3s ease-in-out infinite;
+  animation-delay: 2s;
+}
+
+@keyframes tail-sway-slow {
+  0% { transform: rotate(0deg); }
+  50% { transform: rotate(8deg); }
+  100% { transform: rotate(0deg); }
+}
+
+@keyframes tail-sway-fast {
+  0% { transform: rotate(0deg); }
+  25% { transform: rotate(18deg); }
+  50% { transform: rotate(-5deg); }
+  75% { transform: rotate(18deg); }
+  100% { transform: rotate(0deg); }
+}
+
+@keyframes cat-breathing {
+  0% { transform: scale3d(1, 1, 1); }
+  50% { transform: scale3d(1.02, 0.98, 1); }
+  100% { transform: scale3d(1, 1, 1); }
+}
+
+@keyframes cat-breathing-sleep {
+  0% { transform: scale3d(1, 1, 1); }
+  50% { transform: scale3d(1.01, 0.99, 1); }
+  100% { transform: scale3d(1, 1, 1); }
+}
+
+@keyframes z-float {
+  0% {
+    transform: translate3d(0, 0, 0) scale3d(0.5, 0.5, 1);
+    opacity: 0;
+  }
+  20% {
+    opacity: 0.8;
+  }
+  80% {
+    opacity: 0.4;
+  }
+  100% {
+    transform: translate3d(-18px, -45px, 0) scale3d(1, 1, 1);
+    opacity: 0;
+  }
 }

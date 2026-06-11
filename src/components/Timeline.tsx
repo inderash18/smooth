@@ -2,7 +2,6 @@
 
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
-import { EASE } from "@/lib/motion";
 
 const timelineData = [
   {
@@ -22,7 +21,7 @@ const timelineData = [
   }
 ];
 
-function TimelineItem({ data, index }: { data: typeof timelineData[0], index: number }) {
+function TimelineItem({ data }: { data: typeof timelineData[0] }) {
   const itemRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: itemRef,
@@ -93,7 +92,7 @@ export default function Timeline() {
 
           <div className="flex flex-col">
             {timelineData.map((item, i) => (
-              <TimelineItem key={i} data={item} index={i} />
+              <TimelineItem key={i} data={item} />
             ))}
           </div>
         </div>

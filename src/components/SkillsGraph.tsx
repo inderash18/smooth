@@ -34,23 +34,63 @@ const EDGES = [
 
 export default function SkillsGraph() {
   const containerRef = useRef<HTMLDivElement>(null);
+  const lightRef = useRef<HTMLDivElement>(null);
+  const rectRef = useRef<DOMRect | null>(null);
   const inView = useInView(containerRef, { once: true, margin: "-100px" });
   const [hoveredNode, setHoveredNode] = useState<number | null>(null);
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
 
   // Handle mouse move for parallax/interaction
   useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    let rafId: number | null = null;
+
     const handleMouseMove = (e: MouseEvent) => {
-      if (!containerRef.current) return;
-      const rect = containerRef.current.getBoundingClientRect();
-      setMousePos({
-        x: e.clientX - rect.left,
-        y: e.clientY - rect.top
+      if (rafId) cancelAnimationFrame(rafId);
+
+      rafId = requestAnimationFrame(() => {
+        if (!container) return;
+        let rect = rectRef.current;
+        if (!rect) {
+          rect = container.getBoundingClientRect();
+          rectRef.current = rect;
+        }
+
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+
+        if (lightRef.current) {
+          lightRef.current.style.transform = `translate3d(${x - 200}px, ${y - 200}px, 0)`;
+        }
       });
     };
+
+    const handleMouseEnter = () => {
+      if (container) {
+        rectRef.current = container.getBoundingClientRect();
+      }
+    };
+
+    const handleResize = () => {
+      rectRef.current = null;
+    };
+
+    const hasHover = window.matchMedia("(hover: hover)").matches;
+    if (hasHover) {
+      container.addEventListener("mouseenter", handleMouseEnter);
+      window.addEventListener("mousemove", handleMouseMove);
+      window.addEventListener("resize", handleResize);
+    }
     
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
+    return () => {
+      if (rafId) cancelAnimationFrame(rafId);
+      if (hasHover) {
+        container.removeEventListener("mouseenter", handleMouseEnter);
+        window.removeEventListener("mousemove", handleMouseMove);
+        window.removeEventListener("resize", handleResize);
+      }
+    };
   }, []);
 
   return (
@@ -72,10 +112,10 @@ export default function SkillsGraph() {
           
           {/* Subtle cursor light */}
           <div 
-            className="absolute w-[400px] h-[400px] rounded-full bg-accent/5 blur-3xl pointer-events-none transition-opacity duration-300 opacity-0 group-hover:opacity-100"
+            ref={lightRef}
+            className="absolute top-0 left-0 w-[400px] h-[400px] rounded-full bg-accent/5 blur-3xl pointer-events-none transition-opacity duration-300 opacity-0 group-hover:opacity-100 will-change-transform"
             style={{ 
-              left: mousePos.x, top: mousePos.y,
-              transform: 'translate(-50%, -50%)'
+              transform: 'translate3d(-1000px, -1000px, 0)'
             }}
           />
 

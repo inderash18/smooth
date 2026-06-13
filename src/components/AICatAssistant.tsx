@@ -14,6 +14,7 @@ export default function AICatAssistant() {
   const [isPanelOpen, setIsPanelOpen] = useState(false);
   const [isSleeping, setIsSleeping] = useState(false);
   const [zParticles, setZParticles] = useState<ZParticle[]>([]);
+  const [isHovered, setIsHovered] = useState(false);
 
   const catRef = useRef<HTMLDivElement>(null);
   const mascotRef = useRef<HTMLDivElement>(null);
@@ -169,9 +170,58 @@ export default function AICatAssistant() {
 
   return (
     <>
+      {/* Speech bubble indicator to the left of the cat */}
+      <AnimatePresence>
+        {!isPanelOpen && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8, x: 20 }}
+            animate={{ 
+              opacity: 1, 
+              scale: 1, 
+              x: 0,
+              y: [0, -4, 0] // floating micro-animation
+            }}
+            exit={{ opacity: 0, scale: 0.8, x: 20 }}
+            transition={{
+              y: {
+                repeat: Infinity,
+                duration: 3,
+                ease: "easeInOut"
+              },
+              default: { type: "spring", stiffness: 300, damping: 25 }
+            }}
+            className="fixed bottom-10 right-24 sm:right-28 z-[99] cursor-pointer pointer-events-auto select-none group"
+            onClick={() => setIsPanelOpen(true)}
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
+          >
+            <div className="relative px-3.5 py-2 rounded-2xl bg-white/90 dark:bg-slate-950/80 border border-accent/25 dark:border-cyan-500/35 backdrop-blur-md text-accent dark:text-cyan-400 text-xs font-semibold shadow-lg hover:shadow-xl hover:border-accent/40 dark:hover:border-cyan-500/60 transition-all duration-300 flex items-center gap-2 whitespace-nowrap">
+              {/* Dynamic pulsing dot indicator */}
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent/70 dark:bg-cyan-400/70 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-accent dark:bg-cyan-400"></span>
+              </span>
+              
+              <span className="font-sans tracking-wide">
+                {isSleeping 
+                  ? "Zzz... Click to wake! 😴" 
+                  : isHovered 
+                    ? "Chat with Jarvis! ⚡" 
+                    : "Click me! 🐾"}
+              </span>
+
+              {/* Speech bubble pointer arrow */}
+              <div className="absolute right-[-5px] top-1/2 -translate-y-1/2 w-2.5 h-2.5 bg-white/90 dark:bg-slate-950/80 border-t border-r border-accent/25 dark:border-cyan-500/35 rotate-45 backdrop-blur-md group-hover:border-accent/40 dark:group-hover:border-cyan-500/60 transition-all duration-300"></div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       <div 
         ref={catRef}
         onClick={() => setIsPanelOpen((prev) => !prev)}
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
         className="fixed bottom-4 right-4 z-[99] w-20 h-20 sm:w-24 sm:h-24 cursor-pointer select-none group pointer-events-auto"
         title="Click to interact with Jarvis!"
         role="button"

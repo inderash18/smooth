@@ -4,6 +4,7 @@ import SmoothScroll from "@/components/SmoothScroll";
 import { ThemeProvider } from "@/providers/ThemeProvider";
 import ParticleField from "@/components/ParticleField";
 import AICatAssistant from "@/components/AICatAssistant";
+import { Analytics } from "@vercel/analytics/next";
 
 export const metadata: Metadata = {
   title: "Inderash — AI Engineer & Full Stack Developer",
@@ -49,6 +50,7 @@ export default function RootLayout({
           
           <SmoothScroll />
           {children}
+          <Analytics />
           <AICatAssistant />
         </ThemeProvider>
       </body>

@@ -34,14 +34,8 @@ export default function PortfolioStats() {
     !!process.env.NEXT_PUBLIC_SUPABASE_URL &&
     process.env.NEXT_PUBLIC_SUPABASE_URL !== "https://placeholder-url.supabase.co";
 
-  const [stats, setStats] = useState(() => {
-    return isSupabaseConfigured
-      ? { totalVisitors: 0, totalPageViews: 0 }
-      : { totalVisitors: 12547, totalPageViews: 24122 };
-  });
-  const [onlineCount, setOnlineCount] = useState(() => {
-    return isSupabaseConfigured ? 0 : 7;
-  });
+  const [stats, setStats] = useState({ totalVisitors: 0, totalPageViews: 0 });
+  const [onlineCount, setOnlineCount] = useState(0);
   const [isLoading, setIsLoading] = useState(isSupabaseConfigured);
   const [hasError, setHasError] = useState(false);
 
@@ -258,13 +252,7 @@ export default function PortfolioStats() {
             </div>
           )}
 
-          {!isSupabaseConfigured && !isLoading && !hasError && (
-            <div className="mt-8 text-center relative z-10 border-t border-border/30 pt-6">
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-accent/10 text-accent">
-                Demo Mode (Supabase Unconfigured)
-              </span>
-            </div>
-          )}
+
         </motion.div>
 
       </div>

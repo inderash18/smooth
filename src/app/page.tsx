@@ -5,7 +5,6 @@ import Expertise from "@/components/Expertise";
 import Projects from "@/components/Projects";
 import Timeline from "@/components/Timeline";
 import SkillsGraph from "@/components/SkillsGraph";
-import PortfolioStats from "@/components/PortfolioStats";
 import Contact from "@/components/Contact";
 
 export default function Home() {
@@ -18,7 +17,6 @@ export default function Home() {
       <Projects />
       <Timeline />
       <SkillsGraph />
-      <PortfolioStats />
       <Contact />
     </main>
   );

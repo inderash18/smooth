@@ -11,6 +11,24 @@ export default function ParticleField() {
   useEffect(() => {
     if (!containerRef.current) return;
 
+    // Check WebGL availability to prevent Three.js context creation errors and console spam in environments where it is disabled.
+    const isWebGLAvailable = () => {
+      try {
+        const canvas = document.createElement("canvas");
+        return !!(
+          window.WebGLRenderingContext &&
+          (canvas.getContext("webgl") || canvas.getContext("experimental-webgl"))
+        );
+      } catch {
+        return false;
+      }
+    };
+
+    if (!isWebGLAvailable()) {
+      console.warn("WebGL is not supported or disabled in this browser. ParticleField background disabled.");
+      return;
+    }
+
     const container = containerRef.current;
     let renderer: THREE.WebGLRenderer | null = null;
     let particlesGeometry: THREE.BufferGeometry | null = null;

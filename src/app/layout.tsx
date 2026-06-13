@@ -5,6 +5,7 @@ import { ThemeProvider } from "@/providers/ThemeProvider";
 import ParticleField from "@/components/ParticleField";
 import AICatAssistant from "@/components/AICatAssistant";
 import { Analytics } from "@vercel/analytics/next";
+import AnalyticsTracker from "@/components/AnalyticsTracker";
 
 export const metadata: Metadata = {
   title: "Inderash — AI Engineer & Full Stack Developer",
@@ -49,6 +50,7 @@ export default function RootLayout({
           <div className="bg-grid"></div>
           
           <SmoothScroll />
+          <AnalyticsTracker />
           {children}
           <Analytics />
           <AICatAssistant />

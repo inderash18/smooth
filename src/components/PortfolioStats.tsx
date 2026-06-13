@@ -82,9 +82,15 @@ export default function PortfolioStats() {
 
         console.log("DATA:", statsData, "ERROR:", statsError);
 
-        if (statsError) throw statsError;
-
-        if (isMounted && statsData) {
+        if (statsError) {
+          if (statsError.code === "PGRST116") {
+            if (isMounted) {
+              setStats({ totalVisitors: 0, totalPageViews: 0 });
+            }
+          } else {
+            throw statsError;
+          }
+        } else if (isMounted && statsData) {
           setStats({
             totalVisitors: statsData.total_visitors || 0,
             totalPageViews: statsData.total_page_views || 0,
